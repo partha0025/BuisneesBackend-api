@@ -22,6 +22,10 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
+app.get('/', (req, res) => {
+  res.send('Backend is running!');
+});
+
 app.post('/api/apply', upload.fields([
   { name: 'idProof', maxCount: 1 },
   { name: 'resume', maxCount: 1 }
