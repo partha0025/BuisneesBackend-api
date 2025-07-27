@@ -15,7 +15,8 @@
   "type": "commonjs",
   "main": "index.js",
   "scripts": {
-    "test": "npm start"
+    "test": "npm start",
+     "start": "node main.js"
   },
   "dependencies": {
     "cors": "^2.8.5",
