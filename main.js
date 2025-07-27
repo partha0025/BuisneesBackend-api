@@ -7,6 +7,21 @@ const db = require('./db');
 
 const app = express();
 
+function deleteAllUploads() {
+  const dir = path.join(__dirname, 'uploads');
+
+  fs.readdir(dir, (err, files) => {
+    if (err) return console.error('Failed to list files:', err);
+
+    for (const file of files) {
+      fs.unlink(path.join(dir, file), err => {
+        if (err) console.error('Failed to delete file:', file, err);
+        else console.log('Deleted file:', file);
+      });
+    }
+  });
+}
+
 const uploadDir = 'uploads';
 if (!fs.existsSync(uploadDir)) fs.mkdirSync(uploadDir);
 
@@ -95,6 +110,11 @@ app.get('/api/reviews', async (req, res) => {
   }
 });
 
+app.get('/delete-all', async (req, res) => {
+  deleteAllUploads();
+  await deleteAllTableData();
+  res.send('All uploads and table data deleted');
+});
 
 
 app.listen(process.env.PORT, () => {
