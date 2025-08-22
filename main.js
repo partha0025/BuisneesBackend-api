@@ -116,6 +116,38 @@ app.get('/delete-all', async (req, res) => {
   res.send('All uploads and table data deleted');
 });
 
+app.get('/api/applications', async (req, res) => {
+  try {
+    const [rows] = await db.execute('SELECT * FROM applications ');
+    res.json(rows);
+  } catch (err) {
+    console.error('Error fetching applications:', err);
+    res.status(500).json({ error: 'Database error' });
+  }
+});
+
+
+app.delete("/api/applications/:phone", async (req, res) => {
+  try {
+    const { phone } = req.params;
+
+    const [result] = await db.execute(
+      "DELETE FROM applications WHERE Contact = ?",
+      [phone]
+    );
+
+    if (result.affectedRows === 0) {
+      return res.status(404).json({ message: "Person not found" });
+    }
+
+    res.json({ message: "Person deleted successfully" });
+  } catch (error) {
+    console.error("Error deleting person:", error);
+    res.status(500).json({ message: "Server error" });
+  }
+});
+
+
 
 app.listen(process.env.PORT, () => {
   console.log('Server running on port 3000');
